@@ -1,30 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import Pancake from './Pancake';
 
-class Game extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
+export default class Game extends Component {
+  state = {
       time: undefined,
       pancakes: [],
       cooked: 0,
       burnt: 0,
       raw: 0
-    };
   }
 
-  // TODO: create a componentDidMount() which will set the current time
-  
+  componentDidMount() {
+    this.setCurrentTime()
+  }
+
   setCurrentTime = () => {
     this.setState({ time: new Date(Date.now())});
   }
 
   addPancake = () => {
-    this.setState({
-      pancakes: this.state.pancakes.concat(Date.now())
+    this.setState( prevState => {
+      return {
+        pancakes: [...prevState.pancakes, Date.now()]
+      }
     });
   }
 
@@ -41,7 +40,7 @@ class Game extends React.Component {
 
   render() {
     const { pancakes, burnt, cooked, raw, time } = this.state;
-    const pans = pancakes.map((pancake, index) => <Pancake key={index} id={pancake} takeItOff={this.takeItOff} />);
+    const cakes = pancakes.map((pancake, index) => <Pancake key={index} id={pancake} takeItOff={this.takeItOff} />);
 
     return (
       <div className="Game">
@@ -57,10 +56,8 @@ class Game extends React.Component {
         >
           New pancake!
         </button>
-        <div className="Game__pancakes">{pans}</div>
+        <div className="Game__pancakes">{cakes}</div>
       </div>
     )
   }
 }
-
-export default Game;
